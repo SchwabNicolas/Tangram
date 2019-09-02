@@ -1,0 +1,13 @@
+
+splash.png
+size: 1024,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+logo_ceff_512x231
+  rotate: false
+  xy: 2, 2
+  size: 512, 231
+  orig: 512, 231
+  offset: 0, 0
+  index: -1

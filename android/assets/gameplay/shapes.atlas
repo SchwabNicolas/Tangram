@@ -1,0 +1,55 @@
+
+shapes.png
+size: 1024,1024
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+carre
+  rotate: false
+  xy: 259, 389
+  size: 253, 253
+  orig: 253, 253
+  offset: 0, 0
+  index: -1
+parallelogramme
+  rotate: false
+  xy: 2, 2
+  size: 378, 128
+  orig: 378, 128
+  offset: 0, 0
+  index: -1
+triangleG1
+  rotate: false
+  xy: 259, 644
+  size: 509, 255
+  orig: 509, 255
+  offset: 0, 0
+  index: -1
+triangleG2
+  rotate: false
+  xy: 2, 389
+  size: 255, 510
+  orig: 255, 510
+  offset: 0, 0
+  index: -1
+triangleM
+  rotate: false
+  xy: 2, 132
+  size: 255, 255
+  orig: 255, 255
+  offset: 0, 0
+  index: -1
+triangleP1
+  rotate: false
+  xy: 770, 646
+  size: 127, 253
+  orig: 127, 253
+  offset: 0, 0
+  index: -1
+triangleP2
+  rotate: false
+  xy: 514, 516
+  size: 249, 126
+  orig: 249, 126
+  offset: 0, 0
+  index: -1
