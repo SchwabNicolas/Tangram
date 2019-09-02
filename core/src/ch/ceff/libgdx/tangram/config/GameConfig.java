@@ -9,6 +9,8 @@ public class GameConfig {
     public static final float WORLD_WIDTH = 32f;
     public static final float WORLD_HEIGHT = 24f;
 
+    public static final int ROTATION_STEP = 45;
+
     private GameConfig() {
     }
 }

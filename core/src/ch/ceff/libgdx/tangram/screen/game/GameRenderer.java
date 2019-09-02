@@ -51,14 +51,17 @@ public class GameRenderer implements Disposable {
         Gdx.input.setInputProcessor(new InputAdapter() {
             @Override
             public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+                if (pointer <= 0) resetShapes();
                 for (Shape shape : gamecontroller.getShapes()) {
-                    shape.setInitialRotation(shape.getRotation());
                     Pointer touchPos = pointerPool.newObject(screenX, screenY);
                     pointers.add(touchPos);
                     stage.getViewport().unproject(touchPos.coords);
                     if (shape.getBounds().contains(touchPos.coords)) {
                         dragging = true;
                         shape.setSelected(true);
+                        if (pointer > 0) {
+                            shape.setInitialRotation(shape.getRotation());
+                        }
                     }
                 }
                 return true;
@@ -95,13 +98,20 @@ public class GameRenderer implements Disposable {
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
                 for (Shape shape : controller.getShapes()) {
-                    shape.setSelected(false);
-                    shape.setInitialRotation(null);
+                    //shape.setSelected(false);
+                    //shape.setInitialRotation(null);
                 }
                 pointers.remove(pointers.size() - 1);
                 return true;
             }
         });
+    }
+
+    public void resetShapes() {
+        for (Shape shape : controller.getShapes()) {
+            shape.setSelected(false);
+            shape.setInitialRotation(null);
+        }
     }
 
     public void resize(int width, int height) {
@@ -118,9 +128,8 @@ public class GameRenderer implements Disposable {
         renderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.rect(controller.getPlayableArea().x, controller.getPlayableArea().y, controller.getPlayableArea().width, controller.getPlayableArea().height);
-        for (Shape shape : controller.getShapes()) {
+        for (Shape shape : controller.getShapes())
             renderer.polygon(shape.getBounds().getTransformedVertices());
-        }
         renderer.end();
     }
 
@@ -131,8 +140,19 @@ public class GameRenderer implements Disposable {
 
     private class Pointer implements Pool.Poolable {
         Vector2 coords;
+        private boolean first;
 
         public Pointer() {
+        }
+
+        public Pointer(Vector2 touchPos, boolean first) {
+            this.coords = touchPos;
+            this.first = first;
+        }
+
+        public Pointer(float x, float y, boolean first) {
+            this.coords = new Vector2(x, y);
+            this.first = isFirst();
         }
 
         public Pointer(Vector2 touchPos) {
@@ -143,8 +163,18 @@ public class GameRenderer implements Disposable {
             this.coords = new Vector2(x, y);
         }
 
+        public boolean isFirst() {
+            return first;
+        }
+
+        public void setFirst(boolean first) {
+            this.first = first;
+        }
+
+
         @Override
         public void reset() {
+            first = false;
             coords.setZero();
         }
     }

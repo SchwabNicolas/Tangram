@@ -35,32 +35,21 @@ public abstract class Shape extends Actor {
 
     public void rotateAlongPoint(Vector2 pointer) {
         if (pointer == null) return;
-
-        setRotation(Utils.angleBetweenTwoPoints(pointer, new Vector2(getX(), getY())));
+        int rotation = (int) Math.floor(Utils.angleBetweenTwoPoints(pointer, new Vector2(getX(), getY())));
+        setRotation(Utils.roundTo(rotation, GameConfig.ROTATION_STEP));
     }
 
-    public Polygon getBounds() {
-        return bounds;
+    public void resetParameters() {
+        initialRotation = null;
+        selected = false;
     }
 
-    public void setBounds(Polygon bounds) {
-        this.bounds = bounds;
+    public void moveTo(float x, float y) {
+        setPosition(x, y);
     }
 
-    public boolean isSelected() {
-        return selected;
-    }
-
-    public void setSelected(boolean selected) {
-        this.selected = selected;
-    }
-
-    public float getInitialRotation() {
-        return initialRotation;
-    }
-
-    public void setInitialRotation(Float initialRotation) {
-        this.initialRotation = initialRotation;
+    public void moveTo(Vector2 coords) {
+        moveTo(coords.x, coords.y);
     }
 
     @Override
@@ -87,11 +76,27 @@ public abstract class Shape extends Actor {
         );
     }
 
-    public void moveTo(float x, float y) {
-        setPosition(x, y);
+    public Polygon getBounds() {
+        return bounds;
     }
 
-    public void moveTo(Vector2 coords) {
-        moveTo(coords.x, coords.y);
+    public void setBounds(Polygon bounds) {
+        this.bounds = bounds;
+    }
+
+    public boolean isSelected() {
+        return selected;
+    }
+
+    public void setSelected(boolean selected) {
+        this.selected = selected;
+    }
+
+    public float getInitialRotation() {
+        return initialRotation;
+    }
+
+    public void setInitialRotation(Float initialRotation) {
+        this.initialRotation = initialRotation;
     }
 }

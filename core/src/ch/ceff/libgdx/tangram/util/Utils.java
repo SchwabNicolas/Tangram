@@ -51,4 +51,15 @@ public class Utils {
         Gdx.gl.glClearColor(color.r, color.g, color.b, color.a);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
+
+    public static int roundTo(int toRound, int roundBy) {
+        // Smaller multiple
+        int a = (toRound / roundBy) * roundBy;
+
+        // Larger multiple
+        int b = a + roundBy;
+
+        // Return of closest of two
+        return (toRound - a > b - toRound) ? b : a;
+    }
 }

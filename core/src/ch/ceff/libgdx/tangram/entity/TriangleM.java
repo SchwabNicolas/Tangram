@@ -5,19 +5,18 @@ import com.badlogic.gdx.math.Polygon;
 
 import ch.ceff.libgdx.tangram.config.GameConfig;
 
-public class Square extends Shape {
-    public Square(TextureRegion textureRegion) {
+public class TriangleM extends Shape {
+    public TriangleM(TextureRegion textureRegion) {
         super(textureRegion, new Polygon());
         super.setBounds(new Polygon(new float[]{
-                getWidth() / 2f, 0,
-                getWidth(), getHeight() / 2f,
-                getWidth() / 2f, getHeight(),
-                0, getHeight() / 2
+                0, 0,
+                getWidth(), 0,
+                getWidth(), getHeight(),
+                0, 0
         }));
-        super.setPosition(GameConfig.WORLD_WIDTH / 2 + getWidth() / 2, GameConfig.WORLD_HEIGHT / 2);
+        super.setPosition(GameConfig.WORLD_WIDTH / 2 + getWidth() / 2, GameConfig.WORLD_HEIGHT / 2 - getHeight() / 2);
         super.setDefaultBoundsOrigin();
         super.setDefaultRotation();
     }
-
 
 }

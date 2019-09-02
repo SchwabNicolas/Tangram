@@ -23,7 +23,8 @@ public class GameController {
         );
         EntityFactory entityFactory = new EntityFactory(context.getAssetManager());
         shapes = new Array<Shape>();
-        shapes.add(entityFactory.createParallelogram(), entityFactory.createSquare());
+        shapes.add(entityFactory.createParallelogram(), entityFactory.createSquare(), entityFactory.createTriangleM());
+        shapes.add(entityFactory.createTriangleP1(), entityFactory.createTriangleG1(), entityFactory.createTriangleP2(), entityFactory.createTriangleG2());
     }
 
     public Rectangle getPlayableArea() {
