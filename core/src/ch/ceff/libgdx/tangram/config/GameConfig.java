@@ -9,5 +9,6 @@ public class GameConfig {
     public static final float WORLD_WIDTH = 32f;
     public static final float WORLD_HEIGHT = 24f;
 
-    private GameConfig(){}
+    private GameConfig() {
+    }
 }

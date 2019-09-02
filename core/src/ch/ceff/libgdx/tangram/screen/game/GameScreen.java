@@ -11,10 +11,10 @@ public class GameScreen extends ScreenAdapter {
     private GameController controller;
     private GameRenderer renderer;
 
-    public GameScreen (Tangram context){
+    public GameScreen(Tangram context) {
         this.context = context;
         controller = new GameController(context);
-        renderer = new GameRenderer(context,controller);
+        renderer = new GameRenderer(context, controller);
     }
 
     @Override

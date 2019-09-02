@@ -6,8 +6,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.utils.Logger;
 
 public class DebugCameraController {
 
@@ -37,10 +35,11 @@ public class DebugCameraController {
 
     /**
      * Method handling key pressing.
+     *
      * @param delta
      */
     public void handleKeyTouch(float delta) {
-        if(Gdx.app.getType() != Application.ApplicationType.Desktop) return;
+        if (Gdx.app.getType() != Application.ApplicationType.Desktop) return;
 
         float zoomValue = DEFAULT_ZOOM_SPEED * delta;
         float movement = MOVEMENT_SPEED * delta;

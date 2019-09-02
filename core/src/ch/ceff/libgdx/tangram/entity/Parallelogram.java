@@ -13,7 +13,7 @@ public class Parallelogram extends Shape {
                 getWidth(), getHeight(),
                 getWidth() / 3, getHeight()
         }));
-        super.setPosition(getWidth()/2, getHeight());
+        super.setPosition(getWidth() / 2, getHeight());
         super.setDefaultBoundsOrigin();
         super.setDefaultRotation();
     }

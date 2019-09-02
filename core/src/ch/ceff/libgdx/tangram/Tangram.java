@@ -1,7 +1,6 @@
 package ch.ceff.libgdx.tangram;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -23,6 +22,10 @@ public class Tangram extends Game {
     private SpriteBatch spriteBatch;
     private ShapeRenderer renderer;
 
+    public static Logger getLog() {
+        return log;
+    }
+
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
@@ -42,10 +45,6 @@ public class Tangram extends Game {
         spriteBatch.dispose();
         renderer.dispose();
         assetManager.dispose();
-    }
-
-    public static Logger getLog() {
-        return log;
     }
 
     public OrthographicCamera getGameCamera() {

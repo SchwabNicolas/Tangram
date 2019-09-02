@@ -5,11 +5,11 @@ import com.badlogic.gdx.utils.Array;
 
 import ch.ceff.libgdx.tangram.Tangram;
 import ch.ceff.libgdx.tangram.config.GameConfig;
-import ch.ceff.libgdx.tangram.entity.Shape;
 import ch.ceff.libgdx.tangram.entity.EntityFactory;
+import ch.ceff.libgdx.tangram.entity.Shape;
 
 public class GameController {
-    private final Rectangle rect;
+    private final Rectangle playableArea;
     private Array<Shape> shapes;
 
     public GameController(Tangram context) {
@@ -17,7 +17,7 @@ public class GameController {
         float playableHeight = GameConfig.WORLD_WIDTH / maxAspectRatio;
         float playableMargin = (GameConfig.WORLD_HEIGHT - playableHeight) / 2f;
 
-        rect = new Rectangle(
+        playableArea = new Rectangle(
                 0, playableMargin,
                 GameConfig.WORLD_WIDTH, playableHeight
         );
@@ -26,8 +26,8 @@ public class GameController {
         shapes.add(entityFactory.createParallelogram(), entityFactory.createSquare());
     }
 
-    public Rectangle getRect() {
-        return rect;
+    public Rectangle getPlayableArea() {
+        return playableArea;
     }
 
     public Array<Shape> getShapes() {

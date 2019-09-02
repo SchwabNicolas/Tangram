@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import ch.ceff.libgdx.tangram.config.GameConfig;
+import ch.ceff.libgdx.tangram.util.Utils;
 
 public abstract class Shape extends Actor {
     private Polygon bounds;
@@ -32,9 +33,10 @@ public abstract class Shape extends Actor {
         bounds.setRotation(getRotation());
     }
 
-    public void rotate(Float rotation) {
-        if (rotation == null) return;
-        setRotation(initialRotation + 360 - rotation);
+    public void rotateAlongPoint(Vector2 pointer) {
+        if (pointer == null) return;
+
+        setRotation(Utils.angleBetweenTwoPoints(pointer, new Vector2(getX(), getY())));
     }
 
     public Polygon getBounds() {

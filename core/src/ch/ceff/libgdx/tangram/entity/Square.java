@@ -1,9 +1,7 @@
 package ch.ceff.libgdx.tangram.entity;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Square extends Shape {
     public Square(TextureRegion textureRegion) {

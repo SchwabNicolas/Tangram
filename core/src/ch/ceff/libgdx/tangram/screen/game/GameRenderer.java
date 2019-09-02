@@ -20,20 +20,18 @@ import ch.ceff.libgdx.tangram.util.DebugCameraController;
 import ch.ceff.libgdx.tangram.util.Utils;
 
 public class GameRenderer implements Disposable {
+    private static final Logger log = new Logger(GameRenderer.class.getSimpleName(), Logger.DEBUG);
     private final GameController controller;
-    private Stage stage;///scene pour les acteurs
     private final ShapeRenderer renderer;
 
     ///pour le debug de la camera
     private final DebugCameraController debugCameraController;
+    private Stage stage;///scene pour les acteurs
     private OrthographicCamera camera;
-
     // Inputs
     private PointerPool pointerPool;
     private ArrayList<Pointer> pointers;
     private boolean dragging;
-
-    private static final Logger log = new Logger(GameRenderer.class.getSimpleName(), Logger.DEBUG);
 
     public GameRenderer(Tangram context, final GameController gamecontroller) {
         this.controller = gamecontroller;
@@ -81,8 +79,8 @@ public class GameRenderer implements Disposable {
                         if (pointer > 0) {
                             anglePointer.coords.set(screenX, screenY);
                             stage.getViewport().unproject(anglePointer.coords);
-                            selectedShape.rotate(anglePointer.coords.angle());
-                            log.debug(" " + anglePointer.coords.angle() * Utils.getAngleSign(anglePointer.coords.angle()));
+                            selectedShape.rotateAlongPoint(anglePointer.coords);
+                            log.debug(" " + anglePointer.coords.angle());
                         } else {
                             originPointer.coords.set(screenX, screenY);
                             stage.getViewport().unproject(originPointer.coords);
@@ -91,8 +89,7 @@ public class GameRenderer implements Disposable {
                         break;
                     }
                 }
-                if (selectedShape == null) return false;
-                return true;
+                return selectedShape != null;
             }
 
             @Override
@@ -120,10 +117,9 @@ public class GameRenderer implements Disposable {
         ///TODO: DEBUG
         renderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
-        renderer.rect(controller.getRect().x, controller.getRect().y, controller.getRect().width, controller.getRect().height);
+        renderer.rect(controller.getPlayableArea().x, controller.getPlayableArea().y, controller.getPlayableArea().width, controller.getPlayableArea().height);
         for (Shape shape : controller.getShapes()) {
             renderer.polygon(shape.getBounds().getTransformedVertices());
-            renderer.circle(shape.getBounds().getOriginX(), shape.getBounds().getOriginY(), 0.5f);
         }
         renderer.end();
     }
