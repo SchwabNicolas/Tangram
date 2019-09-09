@@ -3,10 +3,15 @@ package ch.ceff.libgdx.tangram.screen.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Logger;
 import com.badlogic.gdx.utils.Pool;
@@ -23,22 +28,33 @@ public class GameRenderer implements Disposable {
     private static final Logger log = new Logger(GameRenderer.class.getSimpleName(), Logger.DEBUG);
     private final GameController controller;
     private final ShapeRenderer renderer;
-
-    ///pour le debug de la camera
+    private final Tangram context;
+    ///TODO: DEBUG
     private final DebugCameraController debugCameraController;
-    private Stage stage;///scene pour les acteurs
     private OrthographicCamera camera;
-    // Inputs
-    private PointerPool pointerPool;
+    /// Particles
+    ParticleEffectPool touchParticlePool;
     private ArrayList<Pointer> pointers;
     private boolean dragging;
+    Array<ParticleEffectPool.PooledEffect> effects;
+    private Stage stage;
+    /// Inputs
+    private PointerPool pointerPool;
 
     public GameRenderer(Tangram context, final GameController gamecontroller) {
         this.controller = gamecontroller;
         renderer = context.getRenderer();
         pointerPool = new PointerPool();
         pointers = new ArrayList<>();
+        this.context = context;
         stage = new Stage(context.getScreenViewport(), context.getSpriteBatch());
+
+        /// Particle effects
+        effects = new Array<>();
+        ParticleEffect shapeTouchEffect = new ParticleEffect();
+        shapeTouchEffect.load(Gdx.files.internal("particle/shape_touch_particle.p"), context.getAssetManager().get("particle/particles.atlas", TextureAtlas.class));
+        shapeTouchEffect.setEmittersCleanUpBlendFunction(false);
+        touchParticlePool = new ParticleEffectPool(shapeTouchEffect, 1, 2);
 
         for (Shape shape : gamecontroller.getShapes()) {
             stage.addActor(shape);
@@ -83,7 +99,6 @@ public class GameRenderer implements Disposable {
                             anglePointer.coords.set(screenX, screenY);
                             stage.getViewport().unproject(anglePointer.coords);
                             selectedShape.rotateAlongPoint(anglePointer.coords);
-                            log.debug(" " + anglePointer.coords.angle());
                         } else {
                             originPointer.coords.set(screenX, screenY);
                             stage.getViewport().unproject(originPointer.coords);
@@ -97,9 +112,23 @@ public class GameRenderer implements Disposable {
 
             @Override
             public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+                //shape.setSelected(false);
+                //shape.setInitialRotation(null);
                 for (Shape shape : controller.getShapes()) {
-                    //shape.setSelected(false);
-                    //shape.setInitialRotation(null);
+                    if (shape.isSelected()) {
+                        shape.roundPosition();
+                        ParticleEffectPool.PooledEffect effect = touchParticlePool.obtain();
+                        effect.setPosition(shape.getX(), shape.getY());
+                        float[] tempColor = effect.getEmitters().first().getTint().getColors();
+                        tempColor[0] = shape.getShapeColor().r;
+                        tempColor[1] = shape.getShapeColor().g;
+                        tempColor[2] = shape.getShapeColor().b;
+                        float[] tempColor2 = effect.getEmitters().get(effect.getEmitters().size - 1).getTint().getColors();
+                        tempColor2[0] = shape.getShapeColor().r;
+                        tempColor2[1] = shape.getShapeColor().g;
+                        tempColor2[2] = shape.getShapeColor().b;
+                        effects.add(effect);
+                    }
                 }
                 pointers.remove(pointers.size() - 1);
                 return true;
@@ -128,13 +157,44 @@ public class GameRenderer implements Disposable {
         renderer.setProjectionMatrix(stage.getViewport().getCamera().combined);
         renderer.begin(ShapeRenderer.ShapeType.Line);
         renderer.rect(controller.getPlayableArea().x, controller.getPlayableArea().y, controller.getPlayableArea().width, controller.getPlayableArea().height);
-        for (Shape shape : controller.getShapes())
+        for (Shape shape : controller.getShapes()) {
+            renderer.setColor(Color.WHITE);
             renderer.polygon(shape.getBounds().getTransformedVertices());
+            renderer.setColor(Color.FOREST);
+            renderer.circle(shape.getX(), shape.getY(), 0.1f, 360);
+        }
+        for (int y = 0; y < GameConfig.WORLD_HEIGHT; y += GameConfig.GRID_CELL_SIZE) {
+            for (int x = 0; x < GameConfig.WORLD_WIDTH; x += GameConfig.GRID_CELL_SIZE) {
+                renderer.line(x, y, x, GameConfig.WORLD_HEIGHT);
+            }
+        }
+        for (int y = 0; y < GameConfig.WORLD_HEIGHT; y += GameConfig.GRID_CELL_SIZE) {
+            for (int x = 0; x < GameConfig.WORLD_WIDTH; x += GameConfig.GRID_CELL_SIZE) {
+                renderer.line(x, y, GameConfig.WORLD_WIDTH, y);
+            }
+        }
+
         renderer.end();
+
+        context.getSpriteBatch().begin();
+        context.getSpriteBatch().setBlendFunction(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        /// Particles
+        for (int i = effects.size - 1; i >= 0; i--) {
+            ParticleEffectPool.PooledEffect effect = effects.get(i);
+            effect.draw(context.getSpriteBatch(), delta);
+            if (effect.isComplete()) {
+                effect.free();
+                effects.removeIndex(i);
+            }
+        }
+        context.getSpriteBatch().end();
     }
 
     @Override
     public void dispose() {
+        for (int i = effects.size - 1; i >= 0; i--)
+            effects.get(i).free(); //free all the effects back to the pool
+        effects.clear(); //clear the current effects array
         stage.dispose();
     }
 

@@ -22,6 +22,7 @@ public class LoadingScreen extends ScreenAdapter {
         assetManager.get("splash/splash.atlas", TextureAtlas.class);
 
         assetManager.load("gameplay/shapes.atlas", TextureAtlas.class);
+        assetManager.load("particle/particles.atlas", TextureAtlas.class);
     }
 
     @Override
@@ -29,6 +30,7 @@ public class LoadingScreen extends ScreenAdapter {
         renderer.render(assetManager.get("splash/splash.atlas", TextureAtlas.class), delta, assetManager.getProgress());
 
         if (assetManager.update()) {
+
         }
     }
 

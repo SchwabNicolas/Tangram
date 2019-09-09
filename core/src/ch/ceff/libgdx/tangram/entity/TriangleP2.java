@@ -1,5 +1,6 @@
 package ch.ceff.libgdx.tangram.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
 
@@ -17,5 +18,6 @@ public class TriangleP2 extends Shape {
         super.setPosition(GameConfig.WORLD_WIDTH / 2, GameConfig.WORLD_HEIGHT / 2 - getHeight() / 2);
         super.setDefaultBoundsOrigin();
         super.setDefaultRotation();
+        super.setShapeColor(new Color(Color.valueOf("#9E4FFF")));
     }
 }

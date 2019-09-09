@@ -17,9 +17,9 @@ public class AssetPacker {
 
         TexturePacker.process(
                 settings,
-                RAW_ASSET_PATH + "/gameplay",
-                ASSET_PATH + "/gameplay",
-                "shapes"
+                RAW_ASSET_PATH + "/particle",
+                ASSET_PATH + "/particle",
+                "particles"
         );
     }
 }

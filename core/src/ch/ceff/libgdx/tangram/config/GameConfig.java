@@ -9,6 +9,9 @@ public class GameConfig {
     public static final float WORLD_WIDTH = 32f;
     public static final float WORLD_HEIGHT = 24f;
 
+    public static final int GRID_CELL_SIZE = 1;
+    public static final float IMAGE_SCALE = 2;
+
     public static final int ROTATION_STEP = 45;
 
     private GameConfig() {

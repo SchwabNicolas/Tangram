@@ -1,5 +1,6 @@
 package ch.ceff.libgdx.tangram.entity;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Polygon;
@@ -14,6 +15,7 @@ public abstract class Shape extends Actor {
     private TextureRegion textureRegion;
     private boolean selected;
     private Float initialRotation;
+    private Color shapeColor;
 
     public Shape() {
     }
@@ -22,7 +24,7 @@ public abstract class Shape extends Actor {
         this.textureRegion = textureRegion;
         this.bounds = bounds;
         setPosition(getX() - getWidth() / 2f, getY() - getHeight() / 2f);
-        setSize(textureRegion.getRegionWidth() / GameConfig.PPM, textureRegion.getRegionHeight() / GameConfig.PPM);
+        setSize(textureRegion.getRegionWidth() / GameConfig.PPM / GameConfig.IMAGE_SCALE, textureRegion.getRegionHeight() / GameConfig.PPM / GameConfig.IMAGE_SCALE);
     }
 
     public void setDefaultBoundsOrigin() {
@@ -42,6 +44,10 @@ public abstract class Shape extends Actor {
     public void resetParameters() {
         initialRotation = null;
         selected = false;
+    }
+
+    public void roundPosition() {
+        setPosition(Utils.roundTo((int) Math.floor(getX()), GameConfig.GRID_CELL_SIZE), Utils.roundTo((int) Math.floor(getY()), GameConfig.GRID_CELL_SIZE));
     }
 
     public void moveTo(float x, float y) {
@@ -98,5 +104,13 @@ public abstract class Shape extends Actor {
 
     public void setInitialRotation(Float initialRotation) {
         this.initialRotation = initialRotation;
+    }
+
+    public Color getShapeColor() {
+        return shapeColor;
+    }
+
+    public void setShapeColor(Color shapeColor) {
+        this.shapeColor = shapeColor;
     }
 }
