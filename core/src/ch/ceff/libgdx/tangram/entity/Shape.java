@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import ch.ceff.libgdx.tangram.config.GameConfig;
 import ch.ceff.libgdx.tangram.util.Utils;
-
+// Ouaich ouaich les amis
 public abstract class Shape extends Actor {
     private Polygon bounds;
     private TextureRegion textureRegion;
